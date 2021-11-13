@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Verbosity and settings that you pretty much just always are going to want.
+# Use GNU version of coreutils instead of macos default ones
+alias \
+	cp="gcp -iv" \
+	mv="gmv -iv" \
+	rm="grm -vI" \
+	split="gsplit" \
+	mkd="gmkdir -pv" \
+	yt="youtube-dl --add-metadata -i" \
+	ffmpeg="ffmpeg -hide_banner"
+
+# Colorize commands when possible.
+alias \
+	ls="gls -hN --color=auto --group-directories-first" \
+	grep="ggrep --color=auto" \
+	ccat="highlight --out-format=ansi"
+
+alias \
+	java8="javaEnv 08 ; source $HOME/.config/zsh/.zshrc" \
+	java11="javaEnv 11 ; source $HOME/.config/zsh/.zshrc" \
+	java15="javaEnv 15 ; source $HOME/.config/zsh/.zshrc" \
+	s="source $HOME/.config/zsh/.zshrc"
+
+alias 115uploader="$HOME/go/bin/fake115uploader"
+alias hs="http-server"

@@ -1,0 +1,9 @@
+hash -d cac=/Users/bolo/.cache 
+hash -d cf=/Users/bolo/.config 
+hash -d D=/Users/bolo/Downloads 
+hash -d d=/Users/bolo/Documents 
+hash -d h=/Users/bolo 
+hash -d m=/Users/bolo/Music 
+hash -d mn=/Volumes 
+hash -d pp=/Users/bolo/Pictures 
+hash -d vv=/Users/bolo/Videos 

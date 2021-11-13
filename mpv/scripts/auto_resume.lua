@@ -1,0 +1,2 @@
+-- os.execute("sleep 1")
+-- mp.set_property_native("pause", false)

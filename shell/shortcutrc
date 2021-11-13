@@ -1,0 +1,10 @@
+# vim: filetype=sh
+alias cac="cd /Users/bolo/.cache && ls -a" \
+cf="cd /Users/bolo/.config && ls -a" \
+D="cd /Users/bolo/Downloads && ls -a" \
+d="cd /Users/bolo/Documents && ls -a" \
+h="cd /Users/bolo && ls -a" \
+m="cd /Users/bolo/Music && ls -a" \
+mn="cd /Volumes && ls -a" \
+pp="cd /Users/bolo/Pictures && ls -a" \
+vv="cd /Users/bolo/Videos && ls -a" \
