@@ -114,6 +114,7 @@ typeset -gaU chpwd_functions
 chpwd_functions+=__jump_chpwd
 
 compctl -U -K jump_completion j
+source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 
 # export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)

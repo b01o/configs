@@ -103,6 +103,8 @@ colorscheme dogrun
 " highlight nonText ctermbg=NONE
 
 highlight Visual guifg=#785e26 guibg=#fabd2f gui=none
+highlight IncSearch guifg=#785e26 guibg=#fabd2f gui=none
+highlight Search guifg=#785e26 guibg=#fabd2f gui=none
 highlight HighlightedyankRegion guifg=#785e26 guibg=#fabd2f
 
 " highlight MinimapCurrentLine ctermfg=Green guifg=#50FA7B guibg=#494949

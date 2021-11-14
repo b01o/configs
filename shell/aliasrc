@@ -25,3 +25,4 @@ alias \
 
 alias 115uploader="$HOME/go/bin/fake115uploader"
 alias hs="http-server"
+alias vi="nvim"
