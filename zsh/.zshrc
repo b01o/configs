@@ -66,15 +66,7 @@ CONDA_BIN_HOME="$HOME/miniconda3/bin"
 export JAVA_HOME="$JAVA_11_HOME"
 export ORIGIN_PATH=${ORIGIN_PATH:-$PATH}
 export PATH="$JAVA_HOME"/bin:$CONDA_BIN_HOME:$MY_SCRIPTS:${ORIGIN_PATH}
-
-
-function 115sha1uniq(){
-  sort -t'|' -k2,4 -u "$1" | sort
-}
-function 115sha1size(){
-  awk -F'|' '{s+=$2} END {print s}' "$1" | numfmt --to iec --format %.2f
-}
-
+export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 
 source ~/.bash_profile
 
@@ -89,7 +81,7 @@ export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
 # openssl
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 
 # Put the line below in ~/.zshrc:
 #

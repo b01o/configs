@@ -14,12 +14,13 @@ set smartindent
 
 set mouse=a
 set clipboard=unnamed
-set guifont=Iosevka:h16,PingFang\ SC:26
+set guifont=Iosevka:h18,PingFang\ SC:h18
 set laststatus=2
 set noshowmode
 set backspace=indent,eol,start
 " set colorcolumn=80
 set hidden
+
 
 set undofile				" Save undos after file closes
 set undodir=$HOME/.config/nvim/undo	" where to save undo histories
@@ -43,6 +44,17 @@ if !has('nvim')
   set viminfo+=n~/.config/vim/viminfo
 endif
 
+if has('nvim')
+  " Avoid showing extra messages when using completion
+  " set shortmess+=c
+
+  set completeopt=menuone,noinsert,noselect
+endif
+
+" config for VimR
+" if has("gui_vimr")
+" endif
+
 set nocompatible
 if (has("termguicolors"))
   set termguicolors
@@ -54,11 +66,29 @@ call plug#begin()
 
 if has('nvim')
   Plug 'neovim/nvim-lspconfig'
+  " rust environment
+  Plug 'simrat39/rust-tools.nvim'
+
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/vim-vsnip-integ'
+
+  " cmp Snippet completion
+  Plug 'hrsh7th/cmp-vsnip'
   Plug 'nvim-lua/lsp_extensions.nvim'
-  " the main coq
-  Plug 'ms-jpq/coq_nvim',  {'branch': 'coq'}
-  " 9000+ Snippets
-  Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+
+  " cmp Path completion
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-buffer'
+
+  " Snippet engine
+  Plug 'hrsh7th/vim-vsnip'
+
+  " Optional
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+
   Plug 'folke/lsp-colors.nvim'
 endif
 
@@ -83,9 +113,6 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'plasticboy/vim-markdown'
 " Plug 'narodnik/rust-fold-functions.vim'
 
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-
 Plug 'andymass/vim-matchup'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -93,6 +120,8 @@ Plug 'pbrisbin/vim-mkdir'
 Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-rooter'
 call plug#end()
+
+
 " =====================
 " Color setup
 " =====================
@@ -114,7 +143,7 @@ highlight HighlightedyankRegion guifg=#785e26 guibg=#fabd2f
 " ========================
 
 
-let g:coq_settings = { 'display.icons.mode': 'none', 'auto_start': 'shut-up', 'display.pum.fast_close': v:false }
+" let g:coq_settings = { 'display.icons.mode': 'none', 'auto_start': 'shut-up', 'display.pum.fast_close': v:false }
 
 let g:autoformat_autoindent = 0
 let g:minimap_width = 12
@@ -130,69 +159,49 @@ let g:matchup_matchparen_offscreen = {'method': 'popup'}
 let g:netrw_preview = 1
 let g:netrw_winsize = 25
 
-" LSP configuration
-lua << END
-local lspconfig = require('lspconfig')
-local coq = require "coq"
-local on_attach = function(client, bufnr)
-local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+" " LSP configuration
+" lua << END
+" require('rust-tools').setup({})
 
---Enable completion triggered by <c-x><c-o>
-buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+" END
 
--- Mappings.
-local opts = { noremap=true, silent=true }
+let mapleader=" "
+if has('nvim')
+  lua require('setup-lsp')
 
--- See `:help vim.lsp.*` for documentation on any of the below functions
-buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-buf_set_keymap('n', '<space>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  " Code navigation shortcuts
+  " as found in :help lsp
+  nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+  nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+  nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+  nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+  nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+  nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+  nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+  nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+  nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+  nnoremap <Leader>t :lua require'lsp_extensions'.inlay_hints{ only_current_line = true }<CR>
+  nnoremap <Leader>T :lua require'lsp_extensions'.inlay_hints()<CR>
 
-end
+  " Quick-fix
+  nnoremap <silent> <Leader>a    <cmd>lua vim.lsp.buf.code_action()<CR>
+  nnoremap <silent> <Leader>rn    <cmd>lua vim.lsp.buf.rename()<CR>
+  nnoremap <silent> <Leader>f    <cmd>lua vim.lsp.buf.formatting()<CR>
 
-local servers = { "rust_analyzer" , "pyright"}
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup( coq.lsp_ensure_capabilities( {
-      on_attach = on_attach,
-      flags = {
-	debounce_text_changes = 150,
-      },
-      settings = {
-	  ['rust-analyzer'] = {
-	      checkOnSave = {
-		  allFeatures = true,
-		  overrideCommand = {
-		      'cargo', 'clippy', '--workspace', '--message-format=json',
-		      '--all-targets', '--all-features'
-		  }
-	      }
-	  }
-      }
+  nnoremap <silent> <Leader>e   <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+  nnoremap <silent> <Leader>q   <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+  lua require('setup-completion')
 
-  }))
-end
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = true,
-    signs = true,
-    update_in_insert = false,
-  }
-)
-END
+  " 300ms of no cursor movement to trigger CursorHold
+  set updatetime=300
 
+  " Goto previous/next diagnostic warning/error
+  nnoremap <silent> g[ <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+  nnoremap <silent> g] <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+endif
+
+let g:vsnip_filetypes = {}
 
 let mapleader=" "
 

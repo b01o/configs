@@ -2,7 +2,7 @@ require 'mp'
 
 local function set_clipboard(text)
     -- Change path to copyTime-xclip.sh, example: "/home/myuser/.config/mpv/scripts/copyTime-xclip.sh"
-    mp.commandv("run", "/Users/bolo/.config/mpv/scripts/copyTime-xclip.sh", text);
+    mp.commandv("run", "/Users/bolo/.config/mpv/copyTime-xclip.sh", text);
 end
 
 local function copyTime()
